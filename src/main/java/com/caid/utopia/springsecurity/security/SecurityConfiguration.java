@@ -1,24 +1,18 @@
 package com.caid.utopia.springsecurity.security;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +28,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		System.out.println("auth builder Called");
+		
 	    auth
 	    .jdbcAuthentication()
         .dataSource(dataSource)
@@ -61,42 +57,41 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	   //System.out.println( auth.jdbcAuthentication().dataSource(dataSource).getUserDetailsService().getUsersByUsernameQuery());
 	 
 	  
+	  
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		 http
-//         .logout(logout -> logout
-//           .logoutUrl("/user")
-//           .addLogoutHandler(new SecurityContextLogoutHandler())
-//         );
-//		http
-//        .logout(logout -> logout
-//          .logoutUrl("/user")
-//          .addLogoutHandler((request, response, auth) -> {
-//              for (Cookie cookie : request.getCookies()) {
-//                  String cookieName = cookie.getName();
-//                  Cookie cookieToDelete = new Cookie(cookieName, null);
-//                  cookieToDelete.setMaxAge(0);
-//                  response.addCookie(cookieToDelete);
-//              }
-//          })
-//        );
-//  
-//		http.logout();
-//		 SecurityContextHolder.clearContext();
-//		 
-//		 SecurityContextHolder.getContext().setAuthentication(null);
-		 
-		http.authorizeRequests()
+
+        
+        
+      
+        
+		
+		http
+		.csrf().disable()
+		.httpBasic().and()
+		 .formLogin().and()
+//        // .loginProcessingUrl("/login") // link to submit username-password
+//         .loginPage("/login")
+//         .usernameParameter("username")
+//         .passwordParameter("password")
+//         .defaultSuccessUrl("/user")
+//         .failureUrl("/login?error").and()
+		.authorizeRequests()
 		.antMatchers("/public").permitAll()
 		.antMatchers("/authenticated").authenticated()		
 		.antMatchers("/user").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/admin").hasRole("ADMIN")
-		.and().httpBasic();
+		.and()
+		.logout()
+		.logoutUrl("/logout").logoutSuccessUrl("/login")
+		 .and()
+         .exceptionHandling()
+             .accessDeniedPage("/403");
+		;
 		
-//		http.logout();
-		
+
 		
 	}
 	
@@ -105,14 +100,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 	
-//	   @Bean
-//	    public DataSource getDataSource() {
-//	        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-//	        dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
-//	        dataSourceBuilder.url("jdbc:mysql://localhost:3306/library?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
-//	        dataSourceBuilder.username("root");
-//	        dataSourceBuilder.password("Root223");
-//	        return dataSourceBuilder.build();
-//	    }
+	
+	
+
+	
+	
+	
+	
 	
 }
