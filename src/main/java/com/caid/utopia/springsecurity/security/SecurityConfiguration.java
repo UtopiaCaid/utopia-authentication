@@ -28,7 +28,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		System.out.println("auth builder Called");
 		
 	    auth
 	    .jdbcAuthentication()
@@ -83,6 +82,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/authenticated").authenticated()		
 		.antMatchers("/user").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/admin").hasRole("ADMIN")
+		.antMatchers("/getSecurityAccount").authenticated()
 		.and()
 		.logout()
 		.logoutUrl("/logout").logoutSuccessUrl("/login")
