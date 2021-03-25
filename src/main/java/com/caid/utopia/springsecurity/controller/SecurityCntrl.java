@@ -123,11 +123,11 @@ public class SecurityCntrl {
 		admin.setRoleType("ROLE_ADMIN");
 		account.setUsername(auth.getName());
 		String roleName = auth.getAuthorities().iterator().next().toString();
-		if((roleName.toString().equals("ROLE_ADMIN"))||auth.getAuthorities().contains("ROLE_ADMIN")) {
+		if((roleName.toString().equals("ROLE_ADMIN"))) {
 			//auth.getAuthorities().;
 			account.setRoleId(admin);
 		}
-		else if(auth.getAuthorities().contains("USER")||auth.getAuthorities().contains("ROLE_USER")) {
+		else if((roleName.toString().equals("ROLE_USER"))) {
 			//auth.getAuthorities().;
 			account.setRoleId(user);
 		}
