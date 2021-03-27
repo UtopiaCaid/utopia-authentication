@@ -11,7 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -42,6 +46,10 @@ public class SecurityCntrl {
 	AccountsRepo accountsRepo;
 	
 
+	@RequestMapping(path="/")
+	public String baseEndPoint() {
+		return "Base page";
+	}
 	
 	@RequestMapping(path="/public")
 	public String publicEndPoint() {
@@ -53,6 +61,7 @@ public class SecurityCntrl {
 		return "Hello from authenticated";
 	}
 	
+	//@RequestMapping(value="/user", method = RequestMethod.GET)
 	@RequestMapping(path="/user")
 	public String userEndPoint() {
 		return "Hello from User";
@@ -67,8 +76,12 @@ public class SecurityCntrl {
 	}
 	
 	 
-	@RequestMapping(path="/login")
+	@RequestMapping(value="/login", method = RequestMethod.GET, consumes="application/json")
 	public String loginEndPoint() {
+		return "Login Page";
+	}
+	@RequestMapping(value="/login", method = RequestMethod.POST, consumes="application/json")
+	public String loginEndPoint2() {
 		return "Login Page";
 	}
 	
@@ -104,8 +117,9 @@ public class SecurityCntrl {
 	}
 	
 	
-	@RequestMapping(path="/getSecurityAccount")
-	public Accounts getSecurityAccountr() {        
+	@RequestMapping(value="/getSecurityAccount", method = RequestMethod.GET)
+	public Accounts getSecurityAccountr() {     
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
 //		System.out.println("Auth getSecurityAccount stuff");
@@ -116,10 +130,10 @@ public class SecurityCntrl {
 //		System.out.println(auth.getPrincipal());
 		Accounts account = new Accounts();
 		AccountRoles user = new AccountRoles();
-		user.setRoleId(0);
+		user.setRoleId(1);
 		user.setRoleType("ROLE_USER");
 		AccountRoles admin = new AccountRoles();
-		admin.setRoleId(1);
+		admin.setRoleId(2);
 		admin.setRoleType("ROLE_ADMIN");
 		account.setUsername(auth.getName());
 		String roleName = auth.getAuthorities().iterator().next().toString();
@@ -211,22 +225,30 @@ public class SecurityCntrl {
         return principal.getName();
     }
 	
+	
+	/////Add Security service for all the business logic requests
+	
 	@Transactional
 	@RequestMapping(value = "/registerAccount", method = RequestMethod.POST, produces = "application/json")
 	public List<Accounts> registerAccount(@RequestBody Accounts account) throws SQLException { 
 		
 		//if statements makes sure no required values are null
 		try {
-			
+//			System.out.println(getAccountByName(account.getUsername()));
+//			System.out.println(getAccountByName(account.getUsername()));
 		if(account.getPassword() == null) 
 			throw  new Exception("Password is null");
-		if(account.getAccountNumber() == null) 
-			throw  new Exception("AccountNumber is null");
+//		if(account.getAccountNumber() == null) 
+//			throw  new Exception("AccountNumber is null");
 		if(account.getUsername() == null) 
 			throw  new Exception("Username is null");
-		if(account.getRoleId() == null) 
+		///Front end should handle same usernames so a request should never make this far with them
+		if(!(getAccountByName(account.getUsername()).isEmpty())) 
+			throw  new Exception("Username is already taken");
+		if((account.getRoleId() == null)) 
 			throw  new Exception("RoleId is null");
 		
+		//System.out.println("Account");
 		//If planing on sending an un-encoded password
 		String newPass = new BCryptPasswordEncoder().encode(account.getPassword());
 		account.setPassword(newPass);
@@ -252,11 +274,23 @@ public class SecurityCntrl {
 	
 	@Transactional
 	@RequestMapping(value = "/deleteAccount", method = RequestMethod.POST, produces = "application/json")
-	public List<Accounts> deleteAccount(@RequestBody Accounts account) throws SQLException { 
-		
-		accountsRepo.delete(account);
-		return getAllAccounts();
+	public ResponseEntity<?> deleteAccount(@RequestBody Accounts account) throws SQLException { 
+		try {
+			accountsRepo.delete(account);
+			return new ResponseEntity<>(account, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Failed to delete account", HttpStatus.BAD_REQUEST);
+		}
 	}
+//	@Transactional
+//	@RequestMapping(value = "/deleteAccountById", method = RequestMethod.POST, produces = "application/json")
+//	public List<Accounts> deleteAccount(@RequestBody int id) throws SQLException { 
+//		accountsRepo.findById
+//		accountsRepo.delete(account);
+//		return getAllAccounts();
+//	}
+	
 	
 	@RequestMapping(value = "/getAllAccounts", method = RequestMethod.GET, produces = "application/json")
 	public List<Accounts> getAllAccounts() {
@@ -265,8 +299,23 @@ public class SecurityCntrl {
 		return accounts;
 	}
 	
+	@RequestMapping(value = "/getAccountByName", method = RequestMethod.GET, produces = "application/json")
+	public List<Accounts> getAccountByName(@RequestBody String username) throws SQLException { 
+		
+		List<Accounts> accounts = new ArrayList<>();
+		accounts = accountsRepo.readAccountsByUserName(username);
+		return accounts;
+	}
 	
-
+	
+//	@Bean
+//	public MethodInvokingFactoryBean methodInvokingFactoryBean() {
+//	    MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+//	    methodInvokingFactoryBean.setTargetClass(SecurityContextHolder.class);
+//	    methodInvokingFactoryBean.setTargetMethod("setStrategyName");
+//	    methodInvokingFactoryBean.setArguments(new String[]{SecurityContextHolder.MODE_GLOBAL});
+//	    return methodInvokingFactoryBean;
+//	}
 	
 	
 	

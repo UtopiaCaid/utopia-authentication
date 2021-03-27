@@ -52,6 +52,7 @@ import org.junit.jupiter.api.Test;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -59,11 +60,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.caid.utopia.UtopiaApplicationTests;
 
-//@WebAppConfiguration(value = "http://localhost:8080/")
-//@WebMvcTest
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = { UtopiaApplication.class, SecurityCntrl.class, SecurityConfiguration.class })
-//@SpringBootTest(classes = UtopiaApplication.class)
 public class SecurityCntrlTests extends UtopiaApplicationTests {
 	
 	
@@ -101,7 +97,8 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     public void accessUserTest1() throws Exception{
     	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
-    	assertNotEquals(200, status);
+    	//assertNotEquals(200, status);
+    	assertEquals(401, status);
     }
     @WithMockUser(username="user",roles={"USER"})
     @Test
@@ -118,121 +115,76 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	assertEquals(200, status);
     }
     
+    @Test
+    public void accessAdminTest1() throws Exception{
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	int status = result.getResponse().getStatus();
+    	//assertNotEquals(200, status);
+    	assertEquals(401, status);
+    }
+    @WithMockUser(username="user",roles={"USER"})
+    @Test
+    public void accessAdminTest2() throws Exception{
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	int status = result.getResponse().getStatus();
+    	//assertNotEquals(200, status);
+    	assertEquals(403, status);
+    }
     @WithMockUser(username="admin",roles={"ADMIN"})
     @Test
+    public void accessAdminTest3() throws Exception{
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	int status = result.getResponse().getStatus();
+    	assertEquals(200, status);
+    }
+    
+   
+    @Test
     public void getCurrentUserTest1() throws Exception{
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/getSecurityAccount").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	int status = result.getResponse().getStatus();
+    	//assertNotEquals(200, status);
+    	assertEquals(401, status);
+    }
+    @WithMockUser(username="user",roles={"USER"})
+    @Test
+    public void getCurrentUserTest2() throws Exception{
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/getSecurityAccount").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	int status = result.getResponse().getStatus();
+    	assertEquals(200, status);
+    }
+    @WithMockUser(username="admin",roles={"ADMIN"})
+    @Test
+    public void getCurrentUserTest3() throws Exception{
     	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/getSecurityAccount").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
     
     
-    @WithMockUser
     @Test
-    public void test2() throws Exception {
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    public void getAlluserTest() throws Exception{
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/getAllAccounts").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
     
     @WithMockUser(username="user",roles={"USER"})
     @Test
-    public void test3() throws Exception {
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-    	int status = result.getResponse().getStatus();
-//    	System.out.println("Test3");
-//    	System.out.println(status);
-    	assertEquals(403, status);
+    public void logoutTest1() throws Exception{
+    	assertNotNull(SecurityContextHolder.getContext().getAuthentication());
+    	 mvc.perform(MockMvcRequestBuilders.get("/logout").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
     
-	@WithMockUser(username="admin",roles={"ADMIN"})
+    @WithMockUser(username="admin",roles={"ADMIN"})
     @Test
-    public void test4() throws Exception {
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-    	int status = result.getResponse().getStatus();
-    	assertEquals(200, status);
+    public void logoutTest2() throws Exception{
+    	assertNotNull(SecurityContextHolder.getContext().getAuthentication());
+    	 mvc.perform(MockMvcRequestBuilders.get("/logout").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
+    
+    
 
-//	   @Autowired
-//	    private MockMvc mvc;
-//	   
-//	   @Autowired
-//	    private WebApplicationContext context;
-//	   
-//		@InjectMocks
-//		private SecurityCntrl sc; 
-//	   
-//		@Mock 
-//		AccountsRepo accountsRepo;
-//	   
-//	    @Before
-//	    public void setup() {
-////	    	   mvc = MockMvcBuilders
-////	    		          .webAppContextSetup(context)
-////	    		          .apply(springSecurity())
-////	    		          .build();
-//	     
-////	        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-//	    }
-//	    
-	    
-//	    @Test
-//	    public void test1() throws Exception{
-////	    	RequestBuilder request = MockMvcRequestBuilders.get( "/public");
-////	    	MvcResult result = mvc.perform(request).andReturn();
-////	    	assertEquals("Hello from Public",result.getResponse().getContentAsString());
-//	    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/public")).andReturn();
-//	    	System.out.println("Test1");
-//	    	System.out.println(result.getRequest().getContentAsString());
-//	    }
-	    
-//	    @Test
-//	    public void givenWac_whenServletContext_thenItProvidesGreetController() {
-//	    	   mvc = MockMvcBuilders
-//	    		          .webAppContextSetup(context)
-//	    		          .apply(springSecurity())
-//	    		          .build();
-//	        ServletContext servletContext = context.getServletContext();
-//	        
-//	        Assert.assertNotNull(servletContext);
-//	        Assert.assertTrue(servletContext instanceof MockServletContext);
-//	        //Assert.assertNotNull(context.getBean("greetController"));
-//	    }
-	   
-//	   @WithMockUser(username="user",roles={"USER"})
-//	    @Test
-//	    public void givenAuthRequestOnPrivateService_shouldSucceedWith200() throws Exception {
-//	        mvc.perform(get("/user").contentType(MediaType.APPLICATION_JSON))
-//	          .andExpect(status().isOk());
-//	    }
-//	   
-//	   @WithMockUser(username="user",roles={"USER"})
-//	    @Test
-//	    public void getPublic() throws Exception {
-////		   this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-////		   mvc = MockMvcBuilders
-////			          .webAppContextSetup(context)
-////			          .apply(springSecurity())
-////			          .build();
-//	        mvc.perform(get("/public").contentType(MediaType.APPLICATION_JSON))
-//	          .andExpect(status().isOk());
-//	    }
-//	   
-//		@Test()
-//		@WithMockUser
-//		public void userPageAuthenticated() {
-//		  // sc.userEndPoint();
-//			System.out.println("user Auth (cntrl)");
-//			System.out.println(sc.userEndPoint());
-//		   assertEquals("Hello from User",sc.userEndPoint());
-//		}
-//		
-//		@Test()
-//		public void userPageUnauthenticated() {
-//		  // sc.userEndPoint();
-//			System.out.println("user Unuth (cntrl)");
-//			System.out.println(sc.userEndPoint());
-//		   assertNotEquals("Hello from User",sc.userEndPoint());
-//		}
-//	
 }
