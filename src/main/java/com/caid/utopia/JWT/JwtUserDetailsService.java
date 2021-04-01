@@ -28,6 +28,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		//SecurityCntrl sc = new SecurityCntrl();
 		List<Accounts> accounts = null;
 		try {
+			//should filter this down so only the one name gets passed
 			 accounts= getAccountByName(username);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
