@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 import com.caid.utopia.entity.Accounts;
+import com.caid.utopia.entity.AccountRoles;
 import com.caid.utopia.repo.AccountsRepo;
 
 @Service
@@ -21,6 +22,23 @@ public class SecurityService {
 	@Autowired
 	AccountsRepo accountsRepo;
 	
+	
+	
+	public Accounts registerUser(@RequestBody Accounts account) throws SQLException { 
+		AccountRoles ar = new AccountRoles();
+		ar.setRoleId(1);
+		ar.setRoleType("ROLE_USER");
+		account.setRoleId(ar);
+		return addAccount(account);
+	}
+	
+	public Accounts registerAdmin(@RequestBody Accounts account) throws SQLException { 
+		AccountRoles ar = new AccountRoles();
+		ar.setRoleId(2);
+		ar.setRoleType("ROLE_ADMIN");
+		account.setRoleId(ar);
+		return addAccount(account);
+	}
 	
 
 	public Accounts addAccount(@RequestBody Accounts account) throws SQLException { 

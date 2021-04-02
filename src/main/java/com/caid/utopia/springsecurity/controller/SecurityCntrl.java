@@ -322,10 +322,10 @@ public class SecurityCntrl {
 		///Front end should handle same usernames so a request should never make this far with them
 		if(!(securityService.getAccountByName(account.getUsername()).isEmpty())) 
 			throw  new Exception("Username is already taken");
-		if((account.getRoleId() == null)) 
-			throw  new Exception("RoleId is null");
+//		if((account.getRoleId() == null)) 
+//			throw  new Exception("RoleId is null");
 
-		return securityService.addAccount(account); 
+		return securityService.registerUser(account); 
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -351,10 +351,10 @@ public class SecurityCntrl {
 		///Front end should handle same usernames so a request should never make this far with them
 		if(!(securityService.getAccountByName(account.getUsername()).isEmpty())) 
 			throw  new Exception("Username is already taken");
-		if((account.getRoleId() == null)) 
-			throw  new Exception("RoleId is null");
+//		if((account.getRoleId() == null)) 
+//			throw  new Exception("RoleId is null");
 
-		return securityService.addAccount(account); 
+		return securityService.registerAdmin(account); 
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -407,13 +407,7 @@ public class SecurityCntrl {
 	}
 	
 	
-//	@Transactional
-//	@RequestMapping(value = "/addAccount", method = RequestMethod.POST, produces = "application/json")
-//	public List<Accounts> addAccount(@RequestBody Accounts account) throws SQLException { 
-//		
-//		accountsRepo.save(account);
-//		return getAllAccounts();
-//	}
+
 	
 //	@Transactional
 //	@RequestMapping(value = "/deleteAccount", method = RequestMethod.POST, produces = "application/json")
@@ -426,15 +420,9 @@ public class SecurityCntrl {
 //			return new ResponseEntity<>("Failed to delete account", HttpStatus.BAD_REQUEST);
 //		}
 //	}
-//	@Transactional
-//	@RequestMapping(value = "/deleteAccountById", method = RequestMethod.POST, produces = "application/json")
-//	public List<Accounts> deleteAccount(@RequestBody int id) throws SQLException { 
-//		accountsRepo.findById
-//		accountsRepo.delete(account);
-//		return getAllAccounts();
-//	}
+
 	
-	
+	///This is for testing only.
 //	@RequestMapping(value = "/getAllAccounts", method = RequestMethod.GET, produces = "application/json")
 //	public List<Accounts> getAllAccounts() {
 //		List<Accounts> accounts = new ArrayList<>();
@@ -442,14 +430,7 @@ public class SecurityCntrl {
 //		return accounts;
 //	}
 //	
-//	@RequestMapping(value = "/getAccountByName", method = RequestMethod.GET, produces = "application/json")
-//	public List<Accounts> getAccountByName(@RequestBody String username) throws SQLException { 
-//		
-//		List<Accounts> accounts = new ArrayList<>();
-//		accounts = accountsRepo.readAccountsByUserName(username);
-//		return accounts;
-//	}
-	
+
 	
 
 	
