@@ -146,55 +146,55 @@ public class SecurityCntrl {
 	}
 	
 	
-	@RequestMapping(path="/getSecurityContextHolder")
-	public Authentication getSecurityContextHolder() {        
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
-        
-		return auth;
-	}
+//	@RequestMapping(path="/getSecurityContextHolder")
+//	public Authentication getSecurityContextHolder() {        
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		
+//        
+//		return auth;
+//	}
+//	
 	
-	
-	@RequestMapping(value="/getSecurityAccount", method = RequestMethod.GET)
-	public Accounts getSecurityAccountr() {     
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
-//		System.out.println("Auth getSecurityAccount stuff");
-//		System.out.println(auth.getName());
-//		System.out.println(auth.getAuthorities());
-//		System.out.println(auth.getCredentials());
-//		System.out.println(auth.getDetails());
-//		System.out.println(auth.getPrincipal());
-		Accounts account = new Accounts();
-		AccountRoles user = new AccountRoles();
-		user.setRoleId(1);
-		user.setRoleType("ROLE_USER");
-		AccountRoles admin = new AccountRoles();
-		admin.setRoleId(2);
-		admin.setRoleType("ROLE_ADMIN");
-		account.setUsername(auth.getName());
-		String roleName = auth.getAuthorities().iterator().next().toString();
-		if((roleName.toString().equals("ROLE_ADMIN"))) {
-			//auth.getAuthorities().;
-			account.setRoleId(admin);
-		}
-		else if((roleName.toString().equals("ROLE_USER"))) {
-			//auth.getAuthorities().;
-			account.setRoleId(user);
-		}
-		else {
-			///throw error here later
-			System.out.println("role id not found");
-		}
-        
-//		System.out.println("getSecurityAccount");
-//		System.out.println(account.getUsername());
-//		System.out.println(account.getRoleId());
-//		System.out.println(admin.getRoleId());
-		return account;
-	}
-	
+//	@RequestMapping(value="/getSecurityAccount", method = RequestMethod.GET)
+//	public Accounts getSecurityAccountr() {     
+//		
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		
+////		System.out.println("Auth getSecurityAccount stuff");
+////		System.out.println(auth.getName());
+////		System.out.println(auth.getAuthorities());
+////		System.out.println(auth.getCredentials());
+////		System.out.println(auth.getDetails());
+////		System.out.println(auth.getPrincipal());
+//		Accounts account = new Accounts();
+//		AccountRoles user = new AccountRoles();
+//		user.setRoleId(1);
+//		user.setRoleType("ROLE_USER");
+//		AccountRoles admin = new AccountRoles();
+//		admin.setRoleId(2);
+//		admin.setRoleType("ROLE_ADMIN");
+//		account.setUsername(auth.getName());
+//		String roleName = auth.getAuthorities().iterator().next().toString();
+//		if((roleName.toString().equals("ROLE_ADMIN"))) {
+//			//auth.getAuthorities().;
+//			account.setRoleId(admin);
+//		}
+//		else if((roleName.toString().equals("ROLE_USER"))) {
+//			//auth.getAuthorities().;
+//			account.setRoleId(user);
+//		}
+//		else {
+//			///throw error here later
+//			System.out.println("role id not found");
+//		}
+//        
+////		System.out.println("getSecurityAccount");
+////		System.out.println(account.getUsername());
+////		System.out.println(account.getRoleId());
+////		System.out.println(admin.getRoleId());
+//		return account;
+//	}
+//	
 	
 	
 	
@@ -256,17 +256,17 @@ public class SecurityCntrl {
 //	}
 	
 	
-	@RequestMapping(value = "/username", method = RequestMethod.GET)
-    @ResponseBody
-    public String currentUserNameSimple(HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        return principal.getName();
-    }
-	
-	@RequestMapping(value = "/username2", method = RequestMethod.GET)
-    public String currentUserNameSimple2() {
-        return "TestUserNameTest";
-    }
+//	@RequestMapping(value = "/username", method = RequestMethod.GET)
+//    @ResponseBody
+//    public String currentUserNameSimple(HttpServletRequest request) {
+//        Principal principal = request.getUserPrincipal();
+//        return principal.getName();
+//    }
+//	
+//	@RequestMapping(value = "/username2", method = RequestMethod.GET)
+//    public String currentUserNameSimple2() {
+//        return "TestUserNameTest";
+//    }
 
 //	@RequestMapping(value = "/Authentication", method = RequestMethod.GET, produces = "application/json")
 //	public ResponseEntity<Authentication> getAuthentication(@RequestBody Accounts account) throws SQLException {
@@ -369,42 +369,42 @@ public class SecurityCntrl {
 	
 	/////Add Security service for all the business logic requests
 	
-	@Transactional
-	@RequestMapping(value = "/registerAccount", method = RequestMethod.POST, produces = "application/json")
-	public Accounts registerAccount(@RequestBody Accounts account) throws SQLException { 
-		
-		//if statements makes sure no required values are null
-		try {
-//			System.out.println(getAccountByName(account.getUsername()));
-//			System.out.println(getAccountByName(account.getUsername()));
-		if(account.getPassword() == null) 
-			throw  new Exception("Password is null");
-//		if(account.getAccountNumber() == null) 
-//			throw  new Exception("AccountNumber is null");
-		if(account.getUsername() == null) 
-			throw  new Exception("Username is null");
-		///Front end should handle same usernames so a request should never make this far with them
-		if(!(securityService.getAccountByName(account.getUsername()).isEmpty())) 
-			throw  new Exception("Username is already taken");
-		if((account.getRoleId() == null)) 
-			throw  new Exception("RoleId is null");
-		
-		//System.out.println("Account");
-		//If planing on sending an un-encoded password
-//		String newPass = new BCryptPasswordEncoder().encode(account.getPassword());
-//		account.setPassword(newPass);
-			
-//		return addAccount(account);
-		return securityService.addAccount(account);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			//return handleException(e);
-			return null;
-			
-		}
-	}
+//	@Transactional
+//	@RequestMapping(value = "/registerAccount", method = RequestMethod.POST, produces = "application/json")
+//	public Accounts registerAccount(@RequestBody Accounts account) throws SQLException { 
+//		
+//		//if statements makes sure no required values are null
+//		try {
+////			System.out.println(getAccountByName(account.getUsername()));
+////			System.out.println(getAccountByName(account.getUsername()));
+//		if(account.getPassword() == null) 
+//			throw  new Exception("Password is null");
+////		if(account.getAccountNumber() == null) 
+////			throw  new Exception("AccountNumber is null");
+//		if(account.getUsername() == null) 
+//			throw  new Exception("Username is null");
+//		///Front end should handle same usernames so a request should never make this far with them
+//		if(!(securityService.getAccountByName(account.getUsername()).isEmpty())) 
+//			throw  new Exception("Username is already taken");
+//		if((account.getRoleId() == null)) 
+//			throw  new Exception("RoleId is null");
+//		
+//		//System.out.println("Account");
+//		//If planing on sending an un-encoded password
+////		String newPass = new BCryptPasswordEncoder().encode(account.getPassword());
+////		account.setPassword(newPass);
+//			
+////		return addAccount(account);
+//		return securityService.addAccount(account);
+//		}
+//		catch(Exception e) {
+//			e.printStackTrace();
+//			System.out.println(e.getMessage());
+//			//return handleException(e);
+//			return null;
+//			
+//		}
+//	}
 	
 	
 
