@@ -15,5 +15,8 @@ public interface AccountsRepo extends JpaRepository<Accounts, Integer>{
 	
 	@Query(" FROM Accounts where username =:username")
 	public List<Accounts> readAccountsByUserName(@Param("username") String username);
+	
+	@Query(" FROM Accounts where username =:username")
+	public List<Accounts> getAccountByExactUserName(@Param("username") String username);
 
 }

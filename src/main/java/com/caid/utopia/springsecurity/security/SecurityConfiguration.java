@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -106,7 +107,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/user").hasAnyRole("ADMIN", "USER")
 		.antMatchers("/admin").hasRole("ADMIN")
 		.antMatchers("/getSecurityAccount").authenticated()
-		.antMatchers("/authenticate").permitAll()
+		.antMatchers(HttpMethod.POST,"/Authenticate").permitAll()
+		.antMatchers(HttpMethod.GET, "/Authentication").authenticated()
 		.and()
 		.logout()
 		.logoutUrl("/logout").logoutSuccessUrl("/login")

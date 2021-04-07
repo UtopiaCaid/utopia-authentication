@@ -26,29 +26,34 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		//SecurityCntrl sc = new SecurityCntrl();
-		List<Accounts> accounts = null;
+//		List<Accounts> accounts = null;
+//		try {
+//			//should filter this down so only the one name gets passed
+//			 accounts= getAccountByName(username);
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		Accounts account = null;
+//		if(accounts!=null)
+//			account=accounts.get(0);
+		Accounts account = null;
 		try {
-			//should filter this down so only the one name gets passed
-			 accounts= getAccountByName(username);
+			 account= getAccountByExactName(username);
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		Accounts account = null;
-		if(accounts!=null)
-			account=accounts.get(0);
+		
 	if(account !=null) {
 		return new User(account.getUsername(), account.getPassword(),
 				new ArrayList<>());
 	}
-//	else if ("javainuse".equals(username)) {
-//			return new User("javainuse", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
-//					new ArrayList<>());
-//		} else if("user1".equals(username)) {
-//			return new User("user1", "$2a$10$KJivYEkQbd8ZHt/jkCiBeeuo9cU84PiK/Peq/tXdp5sp5AtaTvpQa", 
-//					new ArrayList<>());
-//		}
 		else {
 			throw new UsernameNotFoundException("User not found with username: " + username);
 		}
@@ -60,5 +65,17 @@ public class JwtUserDetailsService implements UserDetailsService {
 		List<Accounts> accounts = new ArrayList<>();
 		accounts = accountsRepo.readAccountsByUserName(username);
 		return accounts;
+	}
+	
+	public Accounts getAccountByExactName(@RequestBody String username) throws Exception { 
+		///add code so only one (the right one) name gets returned
+		List<Accounts> accounts = new ArrayList<>();
+		accounts = accountsRepo.getAccountByExactUserName(username);
+		for(int i=0; i< accounts.size(); i++ ) {
+			if(accounts.get(i).getUsername().equals(username))
+				return accounts.get(i);
+		}
+		System.err.print("Something went wrong getting account");
+		return null;
 	}
 }

@@ -274,22 +274,27 @@ public class SecurityCntrl {
 //		return new ResponseEntity<>(SecurityContextHolder.getContext().getAuthentication(), HttpStatus.OK);
 //		
 //	}
+//	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/Authentication", method = RequestMethod.GET, produces = "application/json")
-	public Accounts getAuthentication() throws SQLException {
+	public Accounts getAuthentication() throws Exception {
 		///add try and catch methods
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 //		System.out.println(SecurityContextHolder.getContext().getAuthentication());
 //		System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		Accounts a1 =securityService.getAccountByName(username).get(0);
+//		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() =="anonymousUser")
+//			return null;
+//		Accounts a1 = new Accounts();
+//		Accounts a1 =securityService.getAccountByName(username).get(0);
+		Accounts a1 =securityService.getAccountByExactName(username);
 		a1.setPassword(null);
 		return a1;
+	
 		
 	}
 	
 	///creates and returns the jwt token
 	@RequestMapping(value = "/Authentication", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws AuthenticationException  {
-	
 			
 		final Authentication authentication=	authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
@@ -320,8 +325,10 @@ public class SecurityCntrl {
 		if(account.getUsername() == null) 
 			throw  new Exception("Username is null");
 		///Front end should handle same usernames so a request should never make this far with them
-		if(!(securityService.getAccountByName(account.getUsername()).isEmpty())) 
+//		if(!(securityService.getAccountByName(account.getUsername()).isEmpty())) 
+		if((securityService.getAccountByExactName(account.getUsername())!=null)) 
 			throw  new Exception("Username is already taken");
+		
 //		if((account.getRoleId() == null)) 
 //			throw  new Exception("RoleId is null");
 
@@ -349,7 +356,8 @@ public class SecurityCntrl {
 		if(account.getUsername() == null) 
 			throw  new Exception("Username is null");
 		///Front end should handle same usernames so a request should never make this far with them
-		if(!(securityService.getAccountByName(account.getUsername()).isEmpty())) 
+//		if(!(securityService.getAccountByName(account.getUsername()).isEmpty()))
+		if((securityService.getAccountByExactName(account.getUsername())!=null)) 
 			throw  new Exception("Username is already taken");
 //		if((account.getRoleId() == null)) 
 //			throw  new Exception("RoleId is null");
@@ -423,12 +431,12 @@ public class SecurityCntrl {
 
 	
 	///This is for testing only.
-//	@RequestMapping(value = "/getAllAccounts", method = RequestMethod.GET, produces = "application/json")
-//	public List<Accounts> getAllAccounts() {
-//		List<Accounts> accounts = new ArrayList<>();
-//		accounts = securityService.getAllAccounts();
-//		return accounts;
-//	}
+	@RequestMapping(value = "/getAllAccounts", method = RequestMethod.GET, produces = "application/json")
+	public List<Accounts> getAllAccounts() {
+		List<Accounts> accounts = new ArrayList<>();
+		accounts = securityService.getAllAccounts();
+		return accounts;
+	}
 //	
 
 	

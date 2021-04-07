@@ -80,4 +80,26 @@ public class SecurityService {
 		accounts = accountsRepo.readAccountsByUserName(username);
 		return accounts;
 	}
+	
+	public Accounts getAccountByExactName(@RequestBody String username) throws Exception { 
+		///add code so only one (the right one) name gets returned
+		List<Accounts> accounts = new ArrayList<>();
+		accounts = accountsRepo.getAccountByExactUserName(username);
+		for(int i=0; i< accounts.size(); i++ ) {
+			if(accounts.get(i).getUsername().equals(username))
+				return accounts.get(i);
+		}
+		System.err.print("Something went wrong getting account");
+		return null;
+//		throw  new Exception("Username is already taken");
+//		if(accounts.get(0).getUsername().equals(username))
+//			return accounts.get(0);
+//		else {
+//			System.err.print("Something went wrong getting account");
+//			throw  new Exception("Username is already taken");
+//			//return null;
+//		}
+
+	}
+	
 }
