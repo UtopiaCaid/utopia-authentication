@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.caid.utopia.repo.AccountsRepo;
+import com.caid.utopia.repo.AccountRepo;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -33,7 +33,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private JwtTokenUtil jwtTokenUtil;
 	
 	@Autowired
-	AccountsRepo accountsRepo;
+	AccountRepo accountsRepo;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

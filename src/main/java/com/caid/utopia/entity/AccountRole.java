@@ -21,7 +21,7 @@ import org.springframework.lang.NonNull;
  */
 @Entity
 @Table(name = "tbl_account_roles")
-public class AccountRoles implements Serializable {
+public class AccountRole implements Serializable {
 
 
 	/**

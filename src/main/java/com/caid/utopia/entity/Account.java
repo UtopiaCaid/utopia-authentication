@@ -24,7 +24,7 @@ import org.springframework.lang.NonNull;
  */
 @Entity
 @Table(name = "tbl_accounts")
-public class Accounts implements Serializable {
+public class Account implements Serializable {
 
 
 	/**
@@ -39,7 +39,7 @@ public class Accounts implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "role_id")
-	private AccountRoles role;
+	private AccountRole role;
 	
 	@Column(name = "username", length = 45)
 	@NonNull
@@ -65,11 +65,11 @@ public class Accounts implements Serializable {
 		this.accountNumber = accountNumber;
 	}
 
-	public AccountRoles getRoleId() {
+	public AccountRole getRoleId() {
 		return role;
 	}
 
-	public void setRoleId(AccountRoles role) {
+	public void setRoleId(AccountRole role) {
 		this.role = role;
 	}
 

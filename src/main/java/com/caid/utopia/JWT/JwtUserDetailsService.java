@@ -13,15 +13,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.caid.utopia.entity.Accounts;
-import com.caid.utopia.repo.AccountsRepo;
+import com.caid.utopia.entity.Account;
+import com.caid.utopia.repo.AccountRepo;
 import com.caid.utopia.springsecurity.controller.SecurityCntrl;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	AccountsRepo accountsRepo;
+	AccountRepo accountsRepo;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,7 +38,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 //		Accounts account = null;
 //		if(accounts!=null)
 //			account=accounts.get(0);
-		Accounts account = null;
+		Account account = null;
 		try {
 			 account= getAccountByExactName(username);
 		} catch (SQLException e) {
@@ -60,16 +60,16 @@ public class JwtUserDetailsService implements UserDetailsService {
 	}
 	
 	
-	public List<Accounts> getAccountByName(@RequestBody String username) throws SQLException { 
+	public List<Account> getAccountByName(@RequestBody String username) throws SQLException { 
 		
-		List<Accounts> accounts = new ArrayList<>();
+		List<Account> accounts = new ArrayList<>();
 		accounts = accountsRepo.readAccountsByUserName(username);
 		return accounts;
 	}
 	
-	public Accounts getAccountByExactName(@RequestBody String username) throws Exception { 
+	public Account getAccountByExactName(@RequestBody String username) throws Exception { 
 		///add code so only one (the right one) name gets returned
-		List<Accounts> accounts = new ArrayList<>();
+		List<Account> accounts = new ArrayList<>();
 		accounts = accountsRepo.getAccountByExactUserName(username);
 		for(int i=0; i< accounts.size(); i++ ) {
 			if(accounts.get(i).getUsername().equals(username))

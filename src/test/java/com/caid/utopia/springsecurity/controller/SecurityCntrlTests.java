@@ -147,7 +147,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	assertEquals(401, status);
     }
     
-    
+    ///Fix so works regardless of data base
     @WithMockUser(username="user1",roles={"USER"},password="userpass")
     @Test
     public void getCurrentUserTest2() throws Exception{
