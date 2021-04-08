@@ -12,28 +12,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-import com.caid.utopia.entity.Accounts;
-import com.caid.utopia.entity.AccountRoles;
-import com.caid.utopia.repo.AccountsRepo;
+import com.caid.utopia.entity.Account;
+import com.caid.utopia.entity.AccountRole;
+import com.caid.utopia.repo.AccountRepo;
 
 @Service
 public class SecurityService {
 
 	@Autowired
-	AccountsRepo accountsRepo;
+	AccountRepo accountsRepo;
 	
 	
 	
-	public Accounts registerUser(@RequestBody Accounts account) throws SQLException { 
-		AccountRoles ar = new AccountRoles();
+	public Account registerUser(@RequestBody Account account) throws SQLException { 
+		AccountRole ar = new AccountRole();
 		ar.setRoleId(1);
 		ar.setRoleType("ROLE_USER");
 		account.setRoleId(ar);
 		return addAccount(account);
 	}
 	
-	public Accounts registerAdmin(@RequestBody Accounts account) throws SQLException { 
-		AccountRoles ar = new AccountRoles();
+	public Account registerAdmin(@RequestBody Account account) throws SQLException { 
+		AccountRole ar = new AccountRole();
 		ar.setRoleId(2);
 		ar.setRoleType("ROLE_ADMIN");
 		account.setRoleId(ar);
@@ -41,14 +41,14 @@ public class SecurityService {
 	}
 	
 
-	public Accounts addAccount(@RequestBody Accounts account) throws SQLException { 
+	public Account addAccount(@RequestBody Account account) throws SQLException { 
 		String newPass = new BCryptPasswordEncoder().encode(account.getPassword());
 		account.setPassword(newPass);
 		return accountsRepo.save(account);
 	}
 	
 
-	public ResponseEntity<?> deleteAccount(@RequestBody Accounts account) throws SQLException { 
+	public ResponseEntity<?> deleteAccount(@RequestBody Account account) throws SQLException { 
 		try {
 			accountsRepo.delete(account);
 			return new ResponseEntity<>(account, HttpStatus.OK);
@@ -67,23 +67,23 @@ public class SecurityService {
 	
 	
 
-	public List<Accounts> getAllAccounts() {
-		List<Accounts> accounts = new ArrayList<>();
+	public List<Account> getAllAccounts() {
+		List<Account> accounts = new ArrayList<>();
 		accounts = accountsRepo.findAll();
 		return accounts;
 	}
 	
 
-	public List<Accounts> getAccountByName(@RequestBody String username) throws SQLException { 
+	public List<Account> getAccountByName(@RequestBody String username) throws SQLException { 
 		///add code so only one (the right one) name gets returned
-		List<Accounts> accounts = new ArrayList<>();
+		List<Account> accounts = new ArrayList<>();
 		accounts = accountsRepo.readAccountsByUserName(username);
 		return accounts;
 	}
 	
-	public Accounts getAccountByExactName(@RequestBody String username) throws Exception { 
+	public Account getAccountByExactName(@RequestBody String username) throws Exception { 
 		///add code so only one (the right one) name gets returned
-		List<Accounts> accounts = new ArrayList<>();
+		List<Account> accounts = new ArrayList<>();
 		accounts = accountsRepo.getAccountByExactUserName(username);
 		for(int i=0; i< accounts.size(); i++ ) {
 			if(accounts.get(i).getUsername().equals(username))

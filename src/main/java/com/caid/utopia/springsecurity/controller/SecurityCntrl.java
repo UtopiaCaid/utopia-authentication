@@ -41,9 +41,9 @@ import com.caid.utopia.JWT.JwtRequest;
 import com.caid.utopia.JWT.JwtResponse;
 import com.caid.utopia.JWT.JwtTokenUtil;
 import com.caid.utopia.JWT.JwtUserDetailsService;
-import com.caid.utopia.entity.AccountRoles;
-import com.caid.utopia.entity.Accounts;
-import com.caid.utopia.repo.AccountsRepo;
+import com.caid.utopia.entity.AccountRole;
+import com.caid.utopia.entity.Account;
+import com.caid.utopia.repo.AccountRepo;
 import com.caid.utopia.springsecurity.service.SecurityService;
 
 
@@ -276,7 +276,7 @@ public class SecurityCntrl {
 //	}
 //	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/Authentication", method = RequestMethod.GET, produces = "application/json")
-	public Accounts getAuthentication() throws Exception {
+	public Account getAuthentication() throws Exception {
 		///add try and catch methods
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 //		System.out.println(SecurityContextHolder.getContext().getAuthentication());
@@ -285,7 +285,7 @@ public class SecurityCntrl {
 //			return null;
 //		Accounts a1 = new Accounts();
 //		Accounts a1 =securityService.getAccountByName(username).get(0);
-		Accounts a1 =securityService.getAccountByExactName(username);
+		Account a1 =securityService.getAccountByExactName(username);
 		a1.setPassword(null);
 		return a1;
 	
@@ -317,7 +317,7 @@ public class SecurityCntrl {
 	
 	@Transactional
 	@RequestMapping(value = "/User", method = RequestMethod.POST, produces = "application/json")
-	public Accounts registerUser(@RequestBody Accounts account) throws SQLException {
+	public Account registerUser(@RequestBody Account account) throws SQLException {
 		///add try catch etc
 		try {
 		if(account.getPassword() == null) 
@@ -348,7 +348,7 @@ public class SecurityCntrl {
 	
 	@Transactional
 	@RequestMapping(value = "/Admin", method = RequestMethod.POST, produces = "application/json")
-	public Accounts registerAdmin(@RequestBody Accounts account) throws SQLException {
+	public Account registerAdmin(@RequestBody Account account) throws SQLException {
 		///add try catch etc
 		try {
 		if(account.getPassword() == null) 
@@ -431,12 +431,12 @@ public class SecurityCntrl {
 
 	
 	///This is for testing only.
-	@RequestMapping(value = "/getAllAccounts", method = RequestMethod.GET, produces = "application/json")
-	public List<Accounts> getAllAccounts() {
-		List<Accounts> accounts = new ArrayList<>();
-		accounts = securityService.getAllAccounts();
-		return accounts;
-	}
+//	@RequestMapping(value = "/getAllAccounts", method = RequestMethod.GET, produces = "application/json")
+//	public List<Account> getAllAccounts() {
+//		List<Account> accounts = new ArrayList<>();
+//		accounts = securityService.getAllAccounts();
+//		return accounts;
+//	}
 //	
 
 	
