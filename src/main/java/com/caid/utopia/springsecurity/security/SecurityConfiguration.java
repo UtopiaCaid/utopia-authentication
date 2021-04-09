@@ -94,12 +94,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		http
 		.csrf().disable()
-		.cors().disable()
-//		.httpBasic().and()
-//		 .formLogin()
-//	      .usernameParameter("username")
-//	      .passwordParameter("password")
-//	      .and()
+//		.cors().disable()
 		.authorizeRequests()
 		.antMatchers("/").permitAll()
 		.antMatchers("/public").permitAll()
@@ -141,27 +136,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //	    web.ignoring().antMatchers("/authenticate");                
 //	}
 //	
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		// configure AuthenticationManager so that it knows from where to load
-		// user for matching credentials
-		// Use BCryptPasswordEncoder
-		
-		 auth
-		    .jdbcAuthentication()
-	        .dataSource(dataSource)
-
-	        .usersByUsernameQuery("select username, password, 'true' as enabled from tbl_accounts where username = ?")
-	        .authoritiesByUsernameQuery(
-	                "SELECT u.username, r.role_type " +
-	                "FROM tbl_account_roles r, tbl_accounts u " +
-	                "WHERE u.username = ? " +
-	                "AND u.role_id = r.role_id"
-	            )
-	        .passwordEncoder(new BCryptPasswordEncoder())
-	        ;
-		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
-	}
+	
+	
+	
+//	@Autowired
+//	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//		// configure AuthenticationManager so that it knows from where to load
+//		// user for matching credentials
+//		// Use BCryptPasswordEncoder
+//		
+//		 auth
+//		    .jdbcAuthentication()
+//	        .dataSource(dataSource)
+//
+//	        .usersByUsernameQuery("select username, password, 'true' as enabled from tbl_accounts where username = ?")
+//	        .authoritiesByUsernameQuery(
+//	                "SELECT u.username, r.role_type " +
+//	                "FROM tbl_account_roles r, tbl_accounts u " +
+//	                "WHERE u.username = ? " +
+//	                "AND u.role_id = r.role_id"
+//	            )
+//	        .passwordEncoder(new BCryptPasswordEncoder())
+//	        ;
+//		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+//	}
+	
 	
 	@Bean
 	@Override

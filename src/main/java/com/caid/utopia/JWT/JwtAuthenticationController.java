@@ -44,39 +44,21 @@ public class JwtAuthenticationController {
 //	@Autowired
 //	AccountsRepo accountsRepo;
 
-	@Autowired
-	private JwtUserDetailsService userDetailsService;
+//	@Autowired
+//	private JwtUserDetailsService userDetailsService;
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws AuthenticationException  {
 	
-//		List<Accounts> accounts = null;
-//		accounts =getAccountByName(authenticationRequest.getUsername());
-//		Accounts account = null;
-//		if(accounts!=null && (accounts.size() != 0))
-//			account=accounts.get(0);
-//		UserDetails userDetails = null;
-//	if(account !=null) {
-//		userDetails = new User(account.getUsername(), account.getPassword(),
-//				new ArrayList<>());
-//	}
-//		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 		
 		
 		final Authentication authentication=	authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		
 		
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		if (!(auth instanceof AnonymousAuthenticationToken)) {
-//		        // userDetails = auth.getPrincipal()
-//		}
-//		UserDetails userDetails =
-//				 (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		final UserDetails userDetails = userDetailsService
+//				.loadUserByUsername(authenticationRequest.getUsername());
 
-//		final String token = jwtTokenUtil.generateToken(userDetails);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		final String token = jwtTokenUtil.generateToken(authentication);
 		
@@ -102,11 +84,6 @@ public class JwtAuthenticationController {
 	
 	
 	
-//	public List<Accounts> getAccountByName(@RequestBody String username) throws SQLException { 
-//		
-//		List<Accounts> accounts = new ArrayList<>();
-//		accounts = accountsRepo.readAccountsByUserName(username);
-//		return accounts;
-//	}
+
 	
 }
