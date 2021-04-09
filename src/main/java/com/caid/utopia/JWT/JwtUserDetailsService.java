@@ -25,27 +25,13 @@ public class JwtUserDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		//SecurityCntrl sc = new SecurityCntrl();
-//		List<Accounts> accounts = null;
-//		try {
-//			//should filter this down so only the one name gets passed
-//			 accounts= getAccountByName(username);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		Accounts account = null;
-//		if(accounts!=null)
-//			account=accounts.get(0);
+
 		Account account = null;
 		try {
 			 account= getAccountByExactName(username);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -60,15 +46,17 @@ public class JwtUserDetailsService implements UserDetailsService {
 	}
 	
 	
-	public List<Account> getAccountByName(@RequestBody String username) throws SQLException { 
-		
-		List<Account> accounts = new ArrayList<>();
-		accounts = accountsRepo.readAccountsByUserName(username);
-		return accounts;
-	}
+	
+	
+	
+//	public List<Account> getAccountByName(@RequestBody String username) throws SQLException { 
+//		
+//		List<Account> accounts = new ArrayList<>();
+//		accounts = accountsRepo.readAccountsByUserName(username);
+//		return accounts;
+//	}
 	
 	public Account getAccountByExactName(@RequestBody String username) throws Exception { 
-		///add code so only one (the right one) name gets returned
 		List<Account> accounts = new ArrayList<>();
 		accounts = accountsRepo.getAccountByExactUserName(username);
 		for(int i=0; i< accounts.size(); i++ ) {
