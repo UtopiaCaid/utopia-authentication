@@ -41,19 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		
 		
 		final String requestTokenHeader = request.getHeader("Authorization");
-		
-//		if(requestTokenHeader!=null) {
-//			System.out.println("Auth token");
-//			System.out.println(requestTokenHeader.toString());
-//			
-//		}
-//		System.out.println("Header Names");
-//		 ArrayList<String> l2 = Collections.list(request.getHeaderNames());
-//		for(String name: l2) {
-//			System.out.println(name);
-//		}
-		
-		
+			
 		
 		String username = null;
 		String jwtToken = null;
@@ -73,7 +61,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			logger.warn("JWT Token is NUll");
 		}
 		else if(!requestTokenHeader.equals("Bearer null")) {
-			logger.warn("JWT Token is NUll");
+			//whenever a route is taken and the user isn't logged in
+//			logger.warn("JWT Token is NUll");
 		}
 		else {
 			logger.warn("JWT Token does not begin with Bearer String");
