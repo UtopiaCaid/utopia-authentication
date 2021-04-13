@@ -130,42 +130,42 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     
     @Test
     public void accessUserTest1() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/userOnly").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(401, status);
     }
     @WithMockUser(username="user",roles={"USER"})
     @Test
     public void accessUserTest2() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/userOnly").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
     @WithMockUser(username="admin",roles={"ADMIN"})
     @Test
     public void accessUserTest3() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/userOnly").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
     
     @Test
     public void accessAdminTest1() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/adminOnly").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(401, status);
     }
     @WithMockUser(username="user",roles={"USER"})
     @Test
     public void accessAdminTest2() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/adminOnly").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(403, status);
     }
     @WithMockUser(username="admin",roles={"ADMIN"})
     @Test
     public void accessAdminTest3() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/admin").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/adminOnly").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
@@ -173,7 +173,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
    
     @Test
     public void getCurrentUserTest1() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/Authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(401, status);
     }
@@ -181,14 +181,14 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     @WithMockUser(username="user1",roles={"USER"},password="userpass")
     @Test
     public void getCurrentUserTest2() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/Authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
     @WithMockUser(username="admin1",roles={"ADMIN"}, password="adminpass")
     @Test
     public void getCurrentUserTest3() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/Authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
@@ -196,7 +196,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     @WithMockUser(username="h2user",roles={"USER"},password="userpass")
     @Test
     public void getCurrentUserTest4() throws Exception{
-    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/Authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/authentication").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	int status = result.getResponse().getStatus();
     	assertEquals(200, status);
     }
@@ -267,12 +267,12 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	 ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     	 System.setErr(new PrintStream(errContent));
     	
-    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/User")
+    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/user")
   			  .content(asJsonString(newUser))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
-    	assertEquals("",result.getResponse().getContentAsString());
+    	assertEquals("Base Page",result.getResponse().getContentAsString());
     
     }
     
@@ -287,12 +287,12 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setPassword("testpass");
     	newUser.setRoleId(userRole);
     	newUser.setEmail("username@email.com");  	
-    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/User")
+    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/user")
   			  .content(asJsonString(newUser))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	
-    	assertEquals("",result.getResponse().getContentAsString());
+    	assertEquals("Base Page",result.getResponse().getContentAsString());
     
     }
     
@@ -307,12 +307,12 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setPassword("testpass");
     	newUser.setRoleId(userRole);
     	newUser.setEmail("username@email.com");  	
-    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/User")
+    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/user")
   			  .content(asJsonString(newUser))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	
-    	assertEquals("",result.getResponse().getContentAsString());
+    	assertEquals("Base Page",result.getResponse().getContentAsString());
     
     }
     
@@ -328,12 +328,12 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setUsername("username");
     	newUser.setRoleId(userRole);
     	newUser.setEmail("username@email.com");  	
-    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/Admin")
+    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/admin")
   			  .content(asJsonString(newUser))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	
-    	assertEquals("",result.getResponse().getContentAsString());
+    	assertEquals("Base Page",result.getResponse().getContentAsString());
     
     }
     
@@ -347,12 +347,12 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setRoleId(userRole);
     	newUser.setPassword("testpass");
     	newUser.setEmail("username@email.com");  	
-    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/Admin")
+    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/admin")
   			  .content(asJsonString(newUser))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	
-    	assertEquals("",result.getResponse().getContentAsString());
+    	assertEquals("Base Page",result.getResponse().getContentAsString());
     
     }
     
@@ -367,12 +367,12 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setRoleId(userRole);
     	newUser.setPassword("testpass");
     	newUser.setEmail("username@email.com");  	
-    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/Admin")
+    	MvcResult result =mvc.perform(MockMvcRequestBuilders.post("/admin")
   			  .content(asJsonString(newUser))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
     	
-    	assertEquals("",result.getResponse().getContentAsString());
+    	assertEquals("Base Page",result.getResponse().getContentAsString());
     
     }
     
@@ -404,7 +404,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setRoleId(userRole);
     	newUser.setPassword("wrongpass");
     	newUser.setEmail("wronguser@email.com");
-    	 MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/Authentication")
+    	 MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/authentication")
      			  .content(asJsonString(newUser))
      			  .contentType(MediaType.APPLICATION_JSON)
      			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -426,7 +426,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setPassword("wrongpass");
     	newUser.setEmail("wronguser@email.com");
 
-    	 MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/Authentication")
+    	 MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/authentication")
      			  .content(asJsonString(newUser))
      			  .contentType(MediaType.APPLICATION_JSON)
      			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -534,7 +534,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newAdmin.setRoleId(adminRole);
     	newAdmin.setPassword("testpass");
     	newAdmin.setEmail(username+"@email.com");
-    	mvc.perform(MockMvcRequestBuilders.post("/Admin")
+    	mvc.perform(MockMvcRequestBuilders.post("/admin")
     			  .content(asJsonString(newAdmin))
     			  .contentType(MediaType.APPLICATION_JSON)
     			.accept(MediaType.APPLICATION_JSON_VALUE));
@@ -554,7 +554,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     	newUser.setRoleId(userRole);
     	newUser.setPassword("testpass");
     	newUser.setEmail(username+"@email.com");
-    	mvc.perform(MockMvcRequestBuilders.post("/User")
+    	mvc.perform(MockMvcRequestBuilders.post("/user")
   			  .content(asJsonString(newUser))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE));
@@ -569,7 +569,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
     @Test
     public Account authenticateAccount(Account account) throws Exception{
     	
-  	  MvcResult response = mvc.perform(MockMvcRequestBuilders.post("/Authentication")
+  	  MvcResult response = mvc.perform(MockMvcRequestBuilders.post("/authentication")
   			  .content(asJsonString(account))
   			  .contentType(MediaType.APPLICATION_JSON)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -579,7 +579,7 @@ public class SecurityCntrlTests extends UtopiaApplicationTests {
   	  String token =  resString.substring(10, resString.indexOf("}")-1);
   		 
   	//Use token to check if the user is now authenticated (returns account of authenticated user if true)
-	  MvcResult response2 = mvc.perform(MockMvcRequestBuilders.get("/Authentication")
+	  MvcResult response2 = mvc.perform(MockMvcRequestBuilders.get("/authentication")
   			.header("Authorization", "Bearer " + token)
   			.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
   

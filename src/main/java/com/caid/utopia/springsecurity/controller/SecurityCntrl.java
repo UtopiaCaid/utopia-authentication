@@ -73,7 +73,7 @@ public class SecurityCntrl {
 	@RequestMapping(path="/")
 	public String baseEndPoint() {
 			
-			return "Base page";
+			return "Base Page";
 		
 	}
 	
@@ -87,20 +87,20 @@ public class SecurityCntrl {
 		return "Hello from authenticated";
 	}
 	
-	@RequestMapping(path="/user")
+	@RequestMapping(path="/userOnly")
 	public String userEndPoint() {
 		return "Hello from User";
 	}
 	
 
-	@RequestMapping(path="/admin")
+	@RequestMapping(path="/adminOnly")
 	public String adminEndPoint() {
 		return "Hello from Admin";
 	}
 	
 	 
 
-	@RequestMapping(value = "/Authentication", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/authentication", method = RequestMethod.GET, produces = "application/json")
 	public Account getAuthentication() throws Exception {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Account a1 =securityService.getAccountByExactName(username);
@@ -111,7 +111,7 @@ public class SecurityCntrl {
 	}
 	
 	///Creates and returns the jwt token
-	@RequestMapping(value = "/Authentication", method = RequestMethod.POST)
+	@RequestMapping(value = "/authentication", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws AuthenticationException  {
 		try {
 		final Authentication authentication=	authenticationManager.authenticate(
@@ -140,7 +140,7 @@ public class SecurityCntrl {
 	
 	
 	@Transactional
-	@RequestMapping(value = "/User", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/user", method = RequestMethod.POST, produces = "application/json")
 	public Account registerUser(@RequestBody Account account) throws SQLException {
 		///add try catch etc
 		try {
@@ -157,7 +157,8 @@ public class SecurityCntrl {
 		}
 		catch(Exception e) {
 			System.err.println(e.getMessage());
-			return null;
+			throw  new UsernameAlreadyExistsException();
+			//return null;
 			
 		}
 		
@@ -166,7 +167,7 @@ public class SecurityCntrl {
 	
 	
 	@Transactional
-	@RequestMapping(value = "/Admin", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/admin", method = RequestMethod.POST, produces = "application/json")
 	public Account registerAdmin(@RequestBody Account account) throws SQLException {
 		///add try catch etc
 		try {
@@ -177,14 +178,16 @@ public class SecurityCntrl {
 		///Front end should handle same usernames so a request should never make this far with them
 
 		if((securityService.getAccountByExactName(account.getUsername())!=null)) 
-			throw  new Exception("Username is already taken");
+			throw  new UsernameAlreadyExistsException();
+//			throw  new Exception("Username is already taken");
 
 
 		return securityService.registerAdmin(account); 
 		}
 		catch(Exception e) {
 			System.err.println(e.getMessage());
-			return null;
+			throw  new UsernameAlreadyExistsException();
+//			return null;
 			
 		}
 		
