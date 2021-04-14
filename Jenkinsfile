@@ -51,8 +51,8 @@ pipeline {
             }
         }
 
-      //   stage('Deploy') {
-      //      steps {
+         stage('Deploy') {
+            steps {
       //          sh 'export AWS_DEFAULT_REGION=us-east-2'
       //          /* groovylint-disable-next-line LineLength */
       //          echo "$DB_USERNAME"
@@ -66,8 +66,8 @@ pipeline {
       //          /* groovylint-disable-next-line LineLength */
       ////          sh 'chmod +x ./aws-cf-deploy.sh'
        //         sh './aws-cf-deploy.sh'
-      //      }
-      //  }
+            }
+        }
 
         stage('Cleanup') {
             steps {
